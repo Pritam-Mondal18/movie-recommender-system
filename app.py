@@ -7,31 +7,42 @@ import os
 
 app = Flask(__name__)
 
-# ---------------- DOWNLOAD FILE ---------------- #
+# ---------------- DOWNLOAD FILE FROM GOOGLE DRIVE ---------------- #
 
-SIMILARITY_URL = "https://drive.google.com/uc?id=1IMBrGlgWYGXbP2pV98joCcCOBAIy-hvg"
+FILE_ID = "1IMBrGlgWYGXbP2pV98joCcCOBAIy-hvg"
+SIMILARITY_FILE = "similarity.pkl"
 
-if not os.path.exists("similarity.pkl"):
-    gdown.download(SIMILARITY_URL, "similarity.pkl", quiet=False)
+def download_similarity():
+    if not os.path.exists(SIMILARITY_FILE):
+        url = f"https://drive.google.com/uc?id={FILE_ID}"
+        print("Downloading similarity.pkl...")
+        gdown.download(url, SIMILARITY_FILE, quiet=False)
+
+# Download before loading
+download_similarity()
 
 # ---------------- LOAD DATA ---------------- #
 
 movies_dict = pickle.load(open("movie_dict.pkl", "rb"))
 movies = pd.DataFrame(movies_dict)
 
-similarity = pickle.load(open("similarity.pkl", "rb"))
+similarity = pickle.load(open(SIMILARITY_FILE, "rb"))
 
 # ---------------- FUNCTIONS ---------------- #
 
 def fetch_poster(movie_id):
-    response = requests.get(
-        f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=431f1599769535dae79f75e0abca9f5f&language=en-US"
-    )
-    data = response.json()
-    poster_path = data.get('poster_path')
-    if poster_path:
-        return "https://image.tmdb.org/t/p/w500" + poster_path
-    else:
+    try:
+        response = requests.get(
+            f"https://api.themoviedb.org/3/movie/{movie_id}?api_key=431f1599769535dae79f75e0abca9f5f&language=en-US"
+        )
+        data = response.json()
+        poster_path = data.get('poster_path')
+
+        if poster_path:
+            return "https://image.tmdb.org/t/p/w500" + poster_path
+        else:
+            return "https://via.placeholder.com/500"
+    except:
         return "https://via.placeholder.com/500"
 
 
@@ -78,4 +89,4 @@ def index():
 # ---------------- RUN ---------------- #
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
