@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Recommender</title>
+</head>
+<body>
+
+    <h1>🎬 Movie Recommender System</h1>
+
+    <form method="POST">
+        <select name="movie">
+            {% for movie in movie_list %}
+                <option value="{{ movie }}">{{ movie }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Recommend</button>
+    </form>
+
+    <div style="display:flex; margin-top:20px;">
+        {% for i in range(recommendations|length) %}
+            <div style="margin-right:20px;">
+                <p>{{ recommendations[i] }}</p>
+                <img src="{{ posters[i] }}" width="150">
+            </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
