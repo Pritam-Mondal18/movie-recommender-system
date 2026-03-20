@@ -18,7 +18,6 @@ def download_similarity():
         print("Downloading similarity.pkl...")
         gdown.download(url, SIMILARITY_FILE, quiet=False)
 
-# Download before loading
 download_similarity()
 
 # ---------------- LOAD DATA ---------------- #
@@ -71,6 +70,7 @@ def recommend(movie):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    selected_movie = None
     recommendations = []
     posters = []
 
@@ -82,11 +82,12 @@ def index():
         'index.html',
         movie_list=movies['title'].values,
         recommendations=recommendations,
-        posters=posters
+        posters=posters,
+        selected_movie=selected_movie   # ✅ important fix
     )
 
 
 # ---------------- RUN ---------------- #
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True)

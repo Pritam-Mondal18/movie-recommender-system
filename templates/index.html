@@ -1,29 +1,191 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Recommender</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #141e30, #243b55);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: white;
+        }
+
+        nav a:hover {
+            color: #ff4b2b;
+        }
+
+        /* MAIN */
+        .container {
+            flex: 1;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        select {
+            padding: 12px;
+            width: 280px;
+            border-radius: 10px;
+            border: none;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 12px 25px;
+            background: #ff4b2b;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #ff416c;
+        }
+
+        /* MOVIES */
+        .movies {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px;
+        }
+
+        .movies::-webkit-scrollbar {
+            display: none;
+        }
+
+        .card {
+            min-width: 200px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+        }
+
+        .card p {
+            padding: 10px;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        footer span {
+            color: #ff4b2b;
+        }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            .movies {
+                display: grid;
+                grid-template-columns: 1fr;
+                overflow-x: hidden;
+            }
+
+            select, button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            header {
+                flex-direction: column;
+            }
+        }
+
+    </style>
 </head>
 <body>
 
-    <h1>🎬 Movie Recommender System</h1>
+<header>
+    <div class="logo">🎬 Movie Recommender</div>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Trending</a>
+        <a href="#">About</a>
+    </nav>
+</header>
+
+<div class="container">
+
+    <h1>Find Your Next Movie 🍿</h1>
 
     <form method="POST">
         <select name="movie">
             {% for movie in movie_list %}
-                <option value="{{ movie }}">{{ movie }}</option>
+                <option value="{{ movie }}"
+                    {% if movie == selected_movie %} selected {% endif %}>
+                    {{ movie }}
+                </option>
             {% endfor %}
         </select>
         <button type="submit">Recommend</button>
     </form>
 
-    <div style="display:flex; margin-top:20px;">
+    <div class="movies">
         {% for i in range(recommendations|length) %}
-            <div style="margin-right:20px;">
+            <div class="card">
+                <img src="{{ posters[i] }}">
                 <p>{{ recommendations[i] }}</p>
-                <img src="{{ posters[i] }}" width="150">
             </div>
         {% endfor %}
     </div>
+
+</div>
+
+<footer>
+    Made with ❤️ by <span>Pritam Mondal</span>
+</footer>
 
 </body>
 </html>
