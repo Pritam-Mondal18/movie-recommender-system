@@ -36,7 +36,7 @@
 ## 🖼️ Preview
 
 <p align="center">
-  <img src="https://via.placeholder.com/800x400?text=Movie+Recommender+UI" width="80%">
+  <img src="movie.png" width="80%">
 </p>
 
 ---
